@@ -10,7 +10,11 @@ use std::{
 
 // Randomly selects a word from the filepath and returns it as a String.
 pub fn choose_word() -> String {
+
     let filename = "src/testdict.txt";
+    if filename.contains("testdict") {
+        println!("DEV NOTICE: You are using the test dictionary!")
+    }
     let file = File::open(filename).unwrap();
     let reader = BufReader::new(file);
 
