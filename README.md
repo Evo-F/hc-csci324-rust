@@ -21,6 +21,9 @@ This repository is for all files related to our term project for CSCI 324 (Progr
 * Rust is fast! 
     - From Wikipedia: "Performance of idiomatic Rust is comparable to performance of equivalent idiomatic C++." 
     - Enough said really.
+* The typical concept of "scopes" is replaced by "ownership". 
+    - A function that creates data is said to "own" that data, *even if it gets returned.*
+    - As such, the calling function needs to "borrow" that data.
 
 
 
