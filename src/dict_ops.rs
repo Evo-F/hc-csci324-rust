@@ -11,7 +11,7 @@ use std::{
 // Randomly selects a word from the filepath and returns it as a String.
 pub fn choose_word() -> String {
 
-    let filename = "src/testdict.txt";
+    let filename = "src/dictionary.txt";
     if filename.contains("testdict") {
         println!("DEV NOTICE: You are using the test dictionary!")
     }
@@ -22,5 +22,4 @@ pub fn choose_word() -> String {
     lines
         .choose(&mut rand::thread_rng())
         .expect("Issue with lines!")
-
 }
