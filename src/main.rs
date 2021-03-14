@@ -50,25 +50,35 @@ fn main() {
         io::stdout().flush().unwrap();
         let mut guess = String::new();
         std::io::stdin().read_line(&mut guess).unwrap();
+        let guess = guess.trim();
 
-        if guess.trim().len() > 1 { // If the user input a string, ignore all but the first character.
-            println!("Only the first character of '{}' will be accepted.", guess.trim());
-        }
-        let guess = guess.to_ascii_lowercase().chars().next().unwrap(); // only use the first character
+        if guess.len() > 1 { // If the user input a string, ignore all but the first character.
+            if word == guess {
+                guess_list.push_str(&guess);
+                println!("'{}' is the correct word!", guess);
+            }
+            else {
+                println!("'{}' is not the correct word.", guess);
+                strikes += 1;
+            }
+        } // end of if guess.len() > 1
+        else {
+            let guess = guess.to_ascii_lowercase().chars().next().unwrap(); // only use the first character
 
-        // INPUT RESULTS - Update guess_list with new input and inform player of input correctness.
-        if !guess.is_alphabetic() { // if the character is not a letter, ignore it
-            println!("'{}' is not a valid letter.", guess);
-        } else if guess_list.contains(guess) { // if the character has already been guessed, ignore it
-            println!("'{}' has already been guessed.", guess);
-        } else if word.contains(guess) { // if the character is contained in the word
-            guess_list.push_str(&guess.to_string()); // push it to the guess_list
-            println!("'{}' was a correct guess.", guess);
-        } else { // if the character was an incorrect guess
-            guess_list.push_str(&guess.to_string()); // push it to the guess list
-            strikes += 1; // and give player a strike for their mistake
-            println!("'{}' was not a correct guess.", guess);
-        }
+            // INPUT RESULTS - Update guess_list with new input and inform player of input correctness.
+            if !guess.is_alphabetic() { // if the character is not a letter, ignore it
+                println!("'{}' is not a valid letter.", guess);
+            } else if guess_list.contains(guess) { // if the character has already been guessed, ignore it
+                println!("'{}' has already been guessed.", guess);
+            } else if word.contains(guess) { // if the character is contained in the word
+                guess_list.push(guess); // push it to the guess_list
+                println!("'{}' was a correct guess.", guess);
+            } else { // if the character was an incorrect guess
+                guess_list.push(guess); // push it to the guess list
+                strikes += 1; // and give player a strike for their mistake
+                println!("'{}' was not a correct guess.", guess);
+            }
+        } // end of else
 
         // MATCH RESULTS - End game if player has max number of strikes, or if the word has been solved.
         if strikes >= 6 {
@@ -80,5 +90,5 @@ fn main() {
             println!("THE MAN IS SAVED");
             break;
         }
-    }
+    } // end of loop
 }
