@@ -4,9 +4,39 @@
 
 use rand::seq::IteratorRandom;
 use std::{
-    fs::{File, OpenOptions},
-    io::{BufRead, BufReader, BufWriter, Write},
+    fs::OpenOptions,
+    io::{BufRead, BufReader, Write},
 };
+use std::ops::Deref;
+
+
+fn validate_word(word: String, diff: u32) -> bool {
+    //Can I just say, I love the match statement over the switch statement in other languages.
+    //If difficulty is easy or medium (1 or 2), max length gets set.
+    //Otherwise, there isn't one.
+    let max_length = match diff {
+        1 => 6,
+        2 => 9,
+        _ => 0
+    }; //for difficulties 0 and 3, there is no maximum length.
+
+    let min_length = match diff {
+        2 => 6,
+        3 => 9,
+        _ => 0
+    }; //for difficulties 0 and 1, there is no minimum length.
+
+    let string_length = word.len() as u32;
+
+    return match diff {
+        0 => true,
+        1 if string_length <= max_length => true,
+        2 if string_length <= max_length && string_length >= min_length => true,
+        3 if string_length >= min_length => true,
+        _ => false
+    }
+}
+
 
 // Randomly selects a word from the filepath and returns it as a String.
 // The number provided as diff corresponds to a difficulty option. See below.
@@ -26,26 +56,10 @@ pub fn choose_word(diff: u32) -> String {
     Difficulty 3 - Words of length 9 or greater.
      */
 
-    //Can I just say, I love the match statement over the switch statement in other languages.
-    //If difficulty is easy or medium (1 or 2), max length gets set.
-    //Otherwise, there isn't one.
-    let max_length = match diff {
-        1 => 6,
-        2 => 9,
-        _ => 0
-    }; //for difficulties 0 and 3, there is no maximum length.
-
-    let min_length = match diff {
-        2 => 6,
-        3 => 9,
-        _ => 0
-    }; //for difficulties 0 and 1, there is no minimum length.
-
-
     //We love OpenOptions!
     //Attempts to open the specified FilePath in read-only mode.
     //The .expect() is for error handling.
-    let mut file = OpenOptions::new()
+    let file = OpenOptions::new()
         .read(true)
         .open(filename)
         .expect("ERROR: File not found!");
@@ -53,29 +67,26 @@ pub fn choose_word(diff: u32) -> String {
     let reader = BufReader::new(file); //Standard buffered reader
 
 
-    //Okay, SO.
-    //reader.lines() returns an iterator over the lines in the file - this iterator is a Lines object
-    //This Lines iterator is....kinda useless. So, we use .map() to convert it into an iterator of Strings.
-    //This String iterator (called 'lines') can then be used with .choose() and .expect() below.
-    let lines = reader.lines().map(|l| l.expect("Couldn't read lines!"));
+    //reader.lines() returns an iterator over the lines in the file - this iterator is a Lines object.
+    let lines = reader.lines();
+    let filtered_lines = lines
+        .filter(|s| validate_word(s
+                                      .as_ref()
+                                      .expect("ERROR: Could not read string!")
+                                      .to_string(), diff));
 
-    //This loop is for only returning words of a specified length or lower.
-    //Words will continue to be randomly chosen until one that fits the specified length is found.
-    loop {
-        let word_to_return = lines
-            .choose(&mut rand::thread_rng())
-            .expect("ERROR: Could not read lines of the file!");
 
-        let word_length = u32::from(word_to_return.len());
+    let word_to_return = filtered_lines
+        .choose(&mut rand::thread_rng())
+        .unwrap()
+        .expect("ERROR: Could not read lines of the file!");
 
-        match diff {
-            0 => return word_to_return,
-            1 if (word_length <= max_length) => return word_to_return,
-            2 if (word_length <= max_length && word_length >= min_length) => return word_to_return,
-            3 if (word_length >= min_length) => return word_to_return,
-            _ => return word_to_return
-        }
-    }
+    let word_length = word_to_return.len() as u32;
+
+    println!("WORD LENGTH: {}", word_length);
+    println!("DIFF: {}", diff);
+
+    return word_to_return;
 
 }
 
@@ -88,5 +99,5 @@ pub fn add_word(word: &str) {
         .append(true)
         .open(filename)
         .expect("ERROR: File not found!");
-    writeln!(file, word).expect("ERROR: Could not write to file!");
+    writeln!(file, "{}", word).expect("ERROR: Could not write to file!");
 }
