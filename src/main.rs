@@ -34,7 +34,7 @@ fn main() {
     let mut strikes:i8 = 0; // number of strikes, 7 strikes triggers loss condition
     let mut guess_list:String = "".to_owned(); // string of past player guesses
     //let word = "boolean"; // leftover hardcoding
-    let word:&str = &dict_ops::choose_word().to_lowercase(); //choose_word() returns String, needs to be borrowed
+    let word:&str = &dict_ops::choose_word(1).to_lowercase(); //choose_word() returns String, needs to be borrowed
     let dev_mode = true;
     if dev_mode {
         println!("DEV MODE IS ENABLED. DEV MESSAGES WILL BE PRINTED.");
