@@ -15,16 +15,16 @@ fn validate_word(word: String, diff: u32) -> bool {
     //If difficulty is easy or medium (1 or 2), max length gets set.
     //Otherwise, there isn't one.
     let max_length = match diff {
-        1 => 6,
+        1 => 5,
         2 => 9,
         _ => 0
-    }; //for difficulties 0 and 3, there is no maximum length.
+    }; //for difficulties 3 and 4, there is no maximum length.
 
     let min_length = match diff {
         2 => 6,
-        3 => 9,
+        3 => 10,
         _ => 0
-    }; //for difficulties 0 and 1, there is no minimum length.
+    }; //for difficulties 1 and 4, there is no minimum length.
 
     let string_length = word.len() as u32;
 
