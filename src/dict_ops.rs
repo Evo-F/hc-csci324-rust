@@ -1,7 +1,3 @@
-//TODO: This file contains code that was borrowed from this link:
-//               https://stackoverflow.com/questions/50788009/how-do-i-get-a-random-line-from-a-file
-// This code is present solely for testing. It needs to be modified and properly cited.
-
 use rand::seq::IteratorRandom;
 use std::{
     fs::OpenOptions,
@@ -29,10 +25,10 @@ fn validate_word(word: String, diff: u32) -> bool {
     let string_length = word.len() as u32;
 
     return match diff {
-        0 => true,
         1 if string_length <= max_length => true,
         2 if string_length <= max_length && string_length >= min_length => true,
         3 if string_length >= min_length => true,
+        4 => true,
         _ => false
     }
 }
@@ -50,10 +46,10 @@ pub fn choose_word(diff: u32) -> String {
     //This function supports difficulty options! Depending on what is specified by diff,
     //this function will only return words of a certain (arbitrary) minimum and maximum length.
     /*
-    Difficulty 0 - All words allowed.
     Difficulty 1 - Words of length 6 or less.
     Difficulty 2 - Words of length 6 to 9.
     Difficulty 3 - Words of length 9 or greater.
+    Difficulty 4 - All words allowed.
      */
 
     //We love OpenOptions!
