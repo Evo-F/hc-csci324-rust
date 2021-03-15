@@ -3,8 +3,6 @@ use std::{
     fs::OpenOptions,
     io::{BufRead, BufReader, Write},
 };
-use std::ops::Deref;
-
 
 fn validate_word(word: String, diff: u32) -> bool {
     //Can I just say, I love the match statement over the switch statement in other languages.
@@ -62,7 +60,6 @@ pub fn choose_word(diff: u32) -> String {
 
     let reader = BufReader::new(file); //Standard buffered reader
 
-
     //reader.lines() returns an iterator over the lines in the file - this iterator is a Lines object.
     let lines = reader.lines();
     let filtered_lines = lines
@@ -71,25 +68,18 @@ pub fn choose_word(diff: u32) -> String {
                                       .expect("ERROR: Could not read string!")
                                       .to_string(), diff));
 
-
     let word_to_return = filtered_lines
         .choose(&mut rand::thread_rng())
         .unwrap()
         .expect("ERROR: Could not read lines of the file!");
 
-    let word_length = word_to_return.len() as u32;
-
-    println!("WORD LENGTH: {}", word_length);
-    println!("DIFF: {}", diff);
-
     return word_to_return;
-
 }
 
 // Appends the word provided as a parameter to the dictionary file
 pub fn add_word(word: &str) {
 
-    let filename = "src/testdict.txt";
+    let filename = "src/dictionary.txt";
 
     let mut file = OpenOptions::new()
         .append(true)

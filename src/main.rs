@@ -5,7 +5,7 @@ use crate::dict_ops::add_word;
 mod dict_ops;
 
 // UPDATE GAME - Print the ASCII art of the hangman board and the current state of the word. Return true if solved.
-fn update_game(word:&str, guess_list:&str, strikes:i8)->bool {
+fn update_game(word:&str, guess_list:&str, strikes:i8) -> bool {
 
     let mut solved = true; // initialize the win condition
     let ascii_array:[&str; 9] = [ // store the ASCII art for the game stages
@@ -96,29 +96,32 @@ fn add_custom_word() {
             1 => continue,
             _ => break
         }
-        println!();
     }
 }
 
-fn get_menu_input(num_options:u32, err_message:&str) -> u32{
+fn get_menu_input(num_options:u32, err_message:&str) -> u32 {
     loop {
         io::stdout().flush().unwrap();
-        let mut input = String::new();
-        std::io::stdin().read_line(&mut input).unwrap();
-        if input.len() > 2 {
+        let mut input = String::new(); // Initialize input variable.
+        std::io::stdin().read_line(&mut input).unwrap(); // Retrieve user input string.
+
+        if input.len() > 2 { // If the user entered anything longer than a single character, error and loop.
             print!("{}", err_message);
             continue;
-        }
-        let input = input.chars().next().unwrap();
-        if !input.is_numeric() {
+        } // Else continue
+        let input = input
+            .chars()
+            .next()
+            .unwrap(); // Convert string to char.
+        if !input.is_numeric() { // If the char is not numeric, error and loop.
             print!("{}", err_message);
             continue;
-        }
-        let input = input.to_digit(10).unwrap();
-        if input > num_options || input < 1 {
+        } // Else continue
+        let input = input.to_digit(10).unwrap(); // Convert char to digit.
+        if input > num_options || input < 1 { // If the digit is outside of the range of options, error and loop.
             print!("{}", err_message);
             continue;
-        }
+        } // Else continue and return the user input, converted into a type <u32> integer.
         return input;
     }
 }
@@ -154,7 +157,11 @@ fn play_game(difficulty:u32) {
                 }
             } // end of if input.len() > 1
             else {
-                let input = input.to_ascii_lowercase().chars().next().unwrap(); // only use the first character
+                let input = input
+                    .to_ascii_lowercase()
+                    .chars()
+                    .next()
+                    .unwrap(); // only use the first character
                 // INPUT RESULTS - Update guess_list with new input and inform player of input correctness.
                 if !input.is_alphabetic() { // if the character is not a letter, ignore it
                     println!("This is not a valid letter.");
