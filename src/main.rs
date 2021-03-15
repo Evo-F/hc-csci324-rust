@@ -4,6 +4,7 @@ mod dict_ops;
 
 // UPDATE GAME - Print the ASCII art of the hangman board and the current state of the word. Return true if solved.
 fn update_game(word:&str, guess_list:&str, strikes:i8)->bool {
+    //TEST COMMENT
 
     let mut solved = true; // initialize the win condition
     let ascii_array:[&str; 9] = [ // store the ASCII art for the game stages
