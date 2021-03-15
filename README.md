@@ -13,7 +13,7 @@ This repository is for all files related to our term project for CSCI 324 (Progr
     - May later add a user-configurable option to treat string entries as sequential character entries. For example, if the word is "elephant" and the user enters "phan", it would be viewed as the user guessing p, h, a, and n in sequence. 
 
 ### Creative Program (Working Idea - Logic Parser)
-* The program should be able to parse logical expressions in the same format as we see in Discrete. Certain alternate symbols may be used.
+* The program should be able to parse logical expressions in standard boolean format.
 * The program will first generate a truth table for the expression. This truth table will be displayed to the user. 
     - NOTE: Because the truth table has 2^n rows, where n is the number of logical symbols present, the expression entered will need to be limited in how many symbols it can include, for performance reasons.
 * The program will then **simplify the logical expression** as much as possible, based on the principle that expressions with identical truth tables are equivalent. 
@@ -24,6 +24,15 @@ This repository is for all files related to our term project for CSCI 324 (Progr
 * Basic Correlation Rules
     - 100% positive - If expression is true, value (a) is ALWAYS true. Expression can be reduced to (a).
     - 100% negative - If expression is true, value (a) is ALWAYS false. Expression can be reduced to (NOT a). 
+* Supported Logical Operations
+    - Logical Symbols + Raw Boolean Values (true/false)
+    - Conjunction (AND/&)
+    - Disjunction (OR/|)
+    - Inequality (XOR/^)
+    - Inverse (NOT/!)
+    - Parentheses
+    - Equivalence (=)
+    - Implication (>) 
 ### Paper (TBD)
 ### Presentation (TBD)
 #### Areas of Focus
