@@ -33,9 +33,7 @@ This repository is for all files related to our term project for CSCI 324 (Progr
     - Parentheses
     - Equivalence (=)
     - Implication (>) 
-### Paper (TBD)
-### Presentation (TBD)
-#### Areas of Focus
+### Areas of Focus
 * Rust is a **very safe** language and takes steps to prevent race conditions, memory corruption, null pointer exceptions, and more.
 * Variables are immutable (constants) by default, and must be declared mutable explicitly. 
     - Combination of C/C++ primitives and new Rust structs (which are also treated as primitives). Example: str vs. String
@@ -49,7 +47,9 @@ This repository is for all files related to our term project for CSCI 324 (Progr
     - Enough said really.
 * The typical concept of "scopes" is replaced by "ownership". 
     - A function that creates data is said to "own" that data, *even if it gets returned.*
-    - As such, the calling function needs to "borrow" that data.
+    - As such, the calling function needs to "borrow" that data. This is Rust lingo for references.
+    - References can be **mutable** or **immutable.** Only one mutable reference to a piece of data can ever exist at any one time. You may have unlimited immutable references to a piece of data. Immutable and mutable references are mutually exclusive.
+    - **This is a compiler-level safeguard against race conditions, and requires the programmer to think very carefully about what parts of the program need access to what data.**
 * Functions can consume their parent! 
     - Certain functions which require a `self` parameter can essentially delete their parent structure when run, which is fantastic for memory efficiency and performance but absolutely terrifying if you need to do anything in a loop.
     - For example: The `iterator.choose()` function (standard random selection from iterator). This function will consume the `iterator` parent object, so if you're trying to `.choose()` in a loop, you're going to have a bad time.
