@@ -1,7 +1,7 @@
-struct LogicObject {
-    mode: u32,
-    subsidiaries: Vec<LogicObject>,
-    root: &'static bool
+pub struct LogicObject<'a> {
+    pub mode: u32,
+    pub subsidiaries: Vec<LogicObject<'a>>,
+    pub root: &'a bool
 } /*
 How does the LogicObject structure work?
 Well, it stores a representation of a logical expression, controlled by its operator.
@@ -29,13 +29,13 @@ pub fn evaluate(obj: &LogicObject) -> bool {
         2 => or(obj),
         3 => not(obj),
         4 => equiv(obj),
-        _ => evaluate(obj.subsidiaries[0])
+        _ => evaluate(&obj.subsidiaries[0])
     }
 }
 
 fn and(obj: &LogicObject) -> bool {
     let mut result_and = true;
-    for o in obj.subsidiaries {
+    for o in &obj.subsidiaries {
         result_and = result_and && evaluate(o);
     }
     return result_and;
@@ -43,20 +43,20 @@ fn and(obj: &LogicObject) -> bool {
 
 fn or(obj: &LogicObject) -> bool {
     let mut result_or = false;
-    for o in obj.subsidiaries {
+    for o in &obj.subsidiaries {
         result_or = result_or || evaluate(o);
     }
     return result_or;
 }
 
 fn not(obj: &LogicObject) -> bool {
-    return !(evaluate(obj.subsidiaries[0]));
+    return !(evaluate(&obj.subsidiaries[0]));
 }
 
 fn equiv(obj: &LogicObject) -> bool {
-    let mut result_equiv = evaluate(obj.subsidiaries[0]);
-    for o in obj.subsidiaries {
-        result_equiv = ( result_equiv == evaluate(o) );
+    let mut result_equiv = evaluate(&obj.subsidiaries[0]);
+    for o in &obj.subsidiaries {
+        result_equiv = result_equiv == evaluate(o);
     }
 
     return result_equiv;
