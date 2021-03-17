@@ -1,5 +1,7 @@
 mod logic;
 
+//test comment
+
 fn main() {
     //We are going to test the parsing of "a AND b."
     let a = false;
