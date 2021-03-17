@@ -1,0 +1,10 @@
+[package]
+name = "parser"
+version = "1.0.0"
+authors = ["Evo Fearnley <ejfear21@g.holycross.edu>", "Justin Bella <jebell21@g.holycross.edu"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8.3"
