@@ -1,5 +1,5 @@
 [package]
-name = "csci324-rust-hangman"
+name = "hangman"
 version = "1.0.0"
 authors = ["Evo Fearnley <ejfear21@g.holycross.edu>", "Justin Bella <jebell21@g.holycross.edu"]
 edition = "2018"
