@@ -33,6 +33,11 @@ This repository is for all files related to our term project for CSCI 324 (Progr
     - Parentheses
     - Equivalence (=)
     - Implication (>) 
+* Input Syntax
+    - All valid logical operation symbols are shown in the above section. Any other symbols seen will be treated as terminal symbols.
+* Implementation Notes
+    - Consider using an UNSAFE HASHMAP with the LogicObjects containing references to values within the HashMap. This way, we can safely "puppet string" the boolean values to generate the truth table. 
+    - The HashMap must be UNSAFE in order to get past Rust's inherent memory safety/race protection protocols. **This should be a point in the presentation - even though Rust tries to be safe, it will still let you be unsafe if you know what you're doing, because the compiler doesn't ALWAYS know.**
 ### Areas of Focus
 * Rust is a **very safe** language and takes steps to prevent race conditions, memory corruption, null pointer exceptions, and more.
 * Variables are immutable (constants) by default, and must be declared mutable explicitly. 
