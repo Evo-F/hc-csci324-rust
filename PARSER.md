@@ -7,9 +7,9 @@
 ## Examples
 Starting Expression: `a & b | c`
 
-Tier 0: `& [a, (b | c)]`
-Tier 1: `| [b, c]`, `term [a]`
-Tier 2: `term [b, c]`
+Tier 0: `& [a, (b | c)]`  
+Tier 1: `| [b, c]`, `term [a]`  
+Tier 2: `term [b, c]`  
 
 # Basic Parsing Procedure
 The following procedure takes place after the user has entered a logical expression.
