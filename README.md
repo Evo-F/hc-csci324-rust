@@ -50,11 +50,18 @@ This repository is for all files related to our term project for CSCI 324 (Progr
 * Rust is fast! 
     - From Wikipedia: "Performance of idiomatic Rust is comparable to performance of equivalent idiomatic C++." 
     - Enough said really.
-* The typical concept of "scopes" is replaced by "ownership". 
-    - A function that creates data is said to "own" that data, *even if it gets returned.*
-    - As such, the calling function needs to "borrow" that data. This is Rust lingo for references.
-    - References can be **mutable** or **immutable.** Only one mutable reference to a piece of data can ever exist at any one time. You may have unlimited immutable references to a piece of data. Immutable and mutable references are mutually exclusive.
+* The typical concept of "scopes" is replaced/augmented by "ownership". 
+    - Data/variables are *owned* by the scope that created them, represented by the curly brackets {}. 
+    - Traditional structures (functions, loops, etc.) count as scopes, but you can also fabricate scopes by just dumping curly brackets. 
+    - Variables typically can't go out of scope - they need to be Moved or Copied before that scope closes and the data is Dropped. 
+    - References in Rust are referred to as "borrowing" - syntax is identical to C/C++ (&varname). 
+    - References can be **mutable** or **immutable** - immutable references are read-only, mutable references are read-write. Immutable and mutable references to a given piece of data are **mutually-exclusive** and only one mutable reference may exist at a time (immutable references have no limit because they are read-only). 
     - **This is a compiler-level safeguard against race conditions, and requires the programmer to think very carefully about what parts of the program need access to what data.**
+* Pointers still exist! Rust is still C/C++ at its very core.
+    - Raw pointers can be used in `unsafe` scopes and can essentially replace references and circumvent their restrictions.
+    - Despite Rust's emphasis on safety, it will let you be unsafe (to an extent) assuming you explicitly declare your flagrant disregard for the rules with `unsafe`. 
+    - If you are being unsafe, **you can still cause errors at runtime.** As such, you need to be very careful.
+    - We used `unsafe` code in order to use raw pointers/dereferencing for truth table generation.
 * Functions can consume their parent! 
     - Certain functions which require a `self` parameter can essentially delete their parent structure when run, which is fantastic for memory efficiency and performance but absolutely terrifying if you need to do anything in a loop.
     - For example: The `iterator.choose()` function (standard random selection from iterator). This function will consume the `iterator` parent object, so if you're trying to `.choose()` in a loop, you're going to have a bad time.
