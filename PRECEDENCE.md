@@ -8,9 +8,6 @@ a & b | c ^ d would be functionally parsed as (a & (b | c)) ^ d
 
 ## Precedence Listing
 1. Equivalence (=)
-2. Implication (>)
-3. Inequality/XOR (^)
-    * XOR is normally not this high in logical precedence, but for our parser we are treating it as inequality. 
 5. AND (&)
 6. OR (|)
 7. NOT(!)
