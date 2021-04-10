@@ -16,3 +16,4 @@ a & b | c ^ d would be functionally parsed as (a & (b | c)) ^ d
 7. NOT(!)
 8. TERMINALS
 
+## Notes 
