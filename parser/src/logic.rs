@@ -1,7 +1,8 @@
 pub struct LogicObject<'a> {
     pub mode: u32,
     pub subsidiaries: Vec<LogicObject<'a>>,
-    pub root: &'a bool
+    pub root: bool,
+    pub parent: &'a LogicObject<'a>
 } /*
 How does the LogicObject structure work?
 Well, it stores a representation of a logical expression, controlled by its operator.
@@ -17,6 +18,8 @@ The mode attribute is an integer and represents how the LogicObject is working. 
 
 The 'subsidiaries' attribute is a vector (collection) of other LogicObjects that are connected to this one.
 This allows us to create branching logical trees from an expression.
+
+The 'parent' attribute points to the LogicObject which is "holding" this LogicObject, if applicable.
 
 The 'root' attribute is a reference to a boolean, and should only be used if the LogicObject is in TERMINAL mode.
 
