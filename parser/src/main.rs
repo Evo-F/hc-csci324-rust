@@ -4,32 +4,30 @@ mod logic;
 
 fn main() {
     //We are going to test the parsing of "a AND b."
-    let a = false;
-    let b = false;
-    let mut a_log = logic::LogicObject {
-        mode: 0, //TERMINAL
-        subsidiaries: Vec::new(),
-        root: a,
-        parent: nil
-    };
+    //STILL WORKING ON THIS.
+    unsafe {
+        let mut a_log = logic::LogicObject {
+            mode: 0,
+            subsidiaries: Vec::new(),
+            root: false
+        };
 
-    let mut b_log = logic::LogicObject {
-        mode: 0, //TERMINAL
-        subsidiaries: Vec::new(),
-        root: b,
-        parent: nil
-    };
+        let mut b_log = logic::LogicObject {
+            mode: 0,
+            subsidiaries: Vec::new(),
+            root: false
+        };
 
-    let root_log = logic::LogicObject {
-        mode: 1, //AND
-        subsidiaries: vec![a_log, b_log],
-        root: false,
-        parent: nil
-    };
-    a_log.parent = &root_log;
-    b_log.parent = &root_log;
+        let mut and_log = logic::LogicObject {
+            mode: 0,
+            subsidiaries: Vec::new(),
+            root: false
+        };
 
-    let result = logic::evaluate(&root_log);
-    println!("{}", result); //should evaluate to false
+        print!("{}", logic::evaluate(&and_log));
+
+    }
+
+
 
 }

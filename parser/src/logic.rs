@@ -1,8 +1,8 @@
+#[std::]
 pub struct LogicObject<'a> {
     pub mode: u32,
-    pub subsidiaries: Vec<LogicObject<'a>>,
-    pub root: bool,
-    pub parent: &'a LogicObject<'a>
+    pub subsidiaries: Vec<&'a LogicObject<'a>>,
+    pub root: bool
 } /*
 How does the LogicObject structure work?
 Well, it stores a representation of a logical expression, controlled by its operator.
@@ -27,7 +27,7 @@ The 'root' attribute is a reference to a boolean, and should only be used if the
 
 pub fn evaluate(obj: &LogicObject) -> bool {
     return match obj.mode {
-        0 => *obj.root,
+        0 => obj.root,
         1 => and(obj),
         2 => or(obj),
         3 => not(obj),
