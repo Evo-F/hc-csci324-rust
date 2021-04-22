@@ -1,6 +1,20 @@
 mod logic;
+use std::io;
+use std::io::prelude::*;
+
 
 //test comment
+
+fn read_input() {
+
+    print!("Enter something: ");
+    io::stdout().flush().unwrap();
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).unwrap();
+    let input = input.trim();
+
+
+}
 
 fn main() {
     //We are going to test the parsing of "a AND b."
