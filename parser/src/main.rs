@@ -2,41 +2,9 @@ use std::collections::HashMap;
 use std::io;
 use std::io::prelude::*;
 
+mod tokenizer;
+
 //test comment
-
-fn read_input() {
-    let mut count = 0;
-    let nonterms = ["&", "|", "!", "="];
-    let mut expr_map = HashMap::new();
-
-    print!("Enter Expression: ");
-    io::stdout().flush().unwrap();
-    let mut input = String::new();
-    std::io::stdin().read_line(&mut input).unwrap();
-    let expr = input.split_whitespace();
-
-    for symbol in expr {
-        if nonterms.contains(&symbol) {
-            count = count + 1;
-            match symbol {
-                "&" => expr_map.insert((symbol, count), (1, ("Sub1", 0), ("Sub2", 0))),
-                "|" => expr_map.insert((symbol, count), (2, ("Sub1", 0), ("Sub2", 0))),
-                "!" => expr_map.insert((symbol, count), (3, ("Sub1", 0), ("Sub2", 0))),
-                "=" => expr_map.insert((symbol, count), (4, ("Sub1", 0), ("Sub2", 0))),
-                _ => expr_map.insert((symbol, count), (0, ("Null", 0), ("Null", 0)))
-            };
-        }
-        else if !expr_map.contains_key(&(symbol, 0)) {
-            expr_map.insert((symbol, 0), (0, ("Stuff", 0), ("Things", 0)));
-        }
-
-    }
-    /*
-    for (key, value) in &expr_map {
-        print!("{} / {}", key, value);
-    }
-    */
-}
 
 
 fn main() {
@@ -82,6 +50,8 @@ fn main() {
 
 
     }
+
+    tokenizer::read_input();
 
 }
 
