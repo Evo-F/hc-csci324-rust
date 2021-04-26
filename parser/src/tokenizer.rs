@@ -1,11 +1,14 @@
 use std::collections::HashMap;
 use std::io;
 use std::io::prelude::*;
+use std::str::SplitWhitespace;
 
-pub fn read_input() {
+pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32))>, HashMap<(String, i32), bool>, String){
     let mut count = 0;
+    //let mut parentheses_ver = 0;
     let nonterms = ["&", "|", "!", "="];
     let mut expr_map = HashMap::new();
+    let mut term_map = HashMap::new();
 
     print!("Enter Expression: ");
     io::stdout().flush().unwrap();
@@ -15,7 +18,6 @@ pub fn read_input() {
 
     for symbol in expr {
         if nonterms.contains(&symbol) {
-            count = count + 1;
             match symbol {
                 "&" => expr_map.insert((symbol.to_string(), count), (1, ("Sub1".to_string(), 0), ("Sub2".to_string(), 0))),
                 "|" => expr_map.insert((symbol.to_string(), count), (2, ("Sub1".to_string(), 0), ("Sub2".to_string(), 0))),
@@ -26,12 +28,25 @@ pub fn read_input() {
         }
         else if !expr_map.contains_key(&(symbol.to_string(), 0)) {
             expr_map.insert((symbol.to_string(), 0), (0, ("Stuff".to_string(), 0), ("Things".to_string(), 0)));
+            term_map.insert((symbol.to_string(), 0), false);
         }
+        count = count + 1;
 
     }
 
+    /*
+    println!("EXPR_MAP CONTENTS:");
     for (key, value) in &expr_map {
         println!("{:?} / {:?}", key, value);
     }
+    println!();
+    println!("TERM_MAP CONTENTS:");
+    for (key, value) in &term_map {
+        println!("{:?} / {:?}", key, value);
+    }
+    println!();
+    */
+
+    return (expr_map, term_map, input);
 
 }
