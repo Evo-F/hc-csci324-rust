@@ -52,8 +52,21 @@ fn main() {
 
     }*/
 
-    let (mut a, mut b, c) = tokenizer::read_input();
-    let (mut items, mut terms, input) = logic::config_hashmaps(a, b, c);
+    let (mut a, mut terms, c) = tokenizer::read_input();
+    /*
+    A - The items map.
+    B - The terms map.
+    C - The tokenized vector.
+     */
+    let (items, root) = logic::config_hashmaps(a, c);
+
+
+
+    println!("RESULT 1: {}", evaluate(root.clone(), &items, &terms));
+    terms.insert(("a".to_string(), 0), true);
+    println!("RESULT 2: {}", evaluate(root.clone(), &items, &terms));
+
+
 
     // BELOW IS ALL DEBUG PRINTING
     /*
@@ -80,18 +93,16 @@ fn main() {
 
 }
 
-fn evaluate(tuple: (i32, (String, i32), (String, i32)),
+fn evaluate(key: (String, i32),
             items: &HashMap<(String, i32), (i32, (String, i32), (String, i32))>,
             terms: &HashMap<(String, i32), bool>) -> bool {
-    let (mode, a, b) = tuple;
 
-    let mut a_temp;
-    let mut b_temp;
+    let (mode, a, b) = items.get(&key).unwrap();
 
-    return if mode == 0 {
+    return if *mode == 0 {
         // This means we've reached a terminal and just need to get its value.
         // The b element is not needed, as terminals point to themselves in closed loops.
-        let a_temp = terms.get(&a);
+        let a_temp = terms.get(&key);
 
         if a_temp.is_none() {
             return false;
@@ -102,15 +113,8 @@ fn evaluate(tuple: (i32, (String, i32), (String, i32)),
         let mut a_bool = false;
         let mut b_bool = false;
 
-        a_temp = items.get(&a);
-        b_temp = items.get(&b);
-
-        if a_temp.is_none() || b_temp.is_none() {
-            return false;
-        }
-
-        a_bool = evaluate(a_temp.unwrap().clone(), &items, &terms);
-        b_bool = evaluate(b_temp.unwrap().clone(), &items, &terms);
+        a_bool = evaluate(a.clone(), &items, &terms);
+        b_bool = evaluate(b.clone(), &items, &terms);
 
         match mode {
             1 => a_bool && b_bool, // AND

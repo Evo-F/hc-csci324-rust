@@ -3,8 +3,9 @@ use std::io;
 use std::io::prelude::*;
 use std::str::SplitWhitespace;
 
-pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32))>, HashMap<(String, i32), bool>, String){
+pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32))>, HashMap<(String, i32), bool>, Vec<(String, i32)>){
     let mut count = 0;
+    let mut tokens = Vec::new();
     //let mut parentheses_ver = 0;
     let nonterms = ["&", "|", "!", "="];
     let mut expr_map = HashMap::new();
@@ -25,10 +26,12 @@ pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32
                 "=" => expr_map.insert((symbol.to_string(), count), (4, ("Sub1".to_string(), 0), ("Sub2".to_string(), 0))),
                 _ => expr_map.insert((symbol.to_string(), count), (0, ("Null".to_string(), 0), ("Null".to_string(), 0)))
             };
+            tokens.push((symbol.to_string(), count));
         }
         else if !expr_map.contains_key(&(symbol.to_string(), 0)) {
             expr_map.insert((symbol.to_string(), 0), (0, ("Stuff".to_string(), 0), ("Things".to_string(), 0)));
             term_map.insert((symbol.to_string(), 0), false);
+            tokens.push((symbol.to_string(), 0));
         }
         count = count + 1;
 
@@ -47,6 +50,6 @@ pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32
     println!();
     */
 
-    return (expr_map, term_map, input);
+    return (expr_map, term_map, tokens);
 
 }
