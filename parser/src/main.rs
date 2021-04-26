@@ -3,6 +3,7 @@ use std::io;
 use std::io::prelude::*;
 
 mod tokenizer;
+mod logic;
 
 //test comment
 
@@ -10,13 +11,13 @@ mod tokenizer;
 fn main() {
     //We are going to test the parsing of "a AND b."
     //STILL WORKING ON THIS.
-
+    /*
     let mut items: HashMap<(String, i32), (i32, (String, i32), (String, i32))> = HashMap::new();
     let mut terms: HashMap<(String, i32), bool> = HashMap::new();
 
-    let a_key: (String, i32) = ("a".parse().unwrap(), 0);
-    let b_key: (String, i32) = ("b".parse().unwrap(), 0);
-    let and_key: (String, i32) = ("&".parse().unwrap(), 0);
+    let a_key: (String, i32) = ("a".to_string(), 0);
+    let b_key: (String, i32) = ("b".to_string(), 0);
+    let and_key: (String, i32) = ("&".to_string(), 0);
 
     items.insert(a_key.clone(), (0, a_key.clone(), a_key.clone()));
     items.insert(b_key.clone(), (0, b_key.clone(), b_key.clone()));
@@ -49,9 +50,33 @@ fn main() {
         println!("{}", evaluate(eval_tuple_real.clone(), &items, &terms));
 
 
-    }
+    }*/
 
-    tokenizer::read_input();
+    let (mut a, mut b, c) = tokenizer::read_input();
+    let (mut items, mut terms, input) = logic::config_hashmaps(a, b, c);
+
+    // BELOW IS ALL DEBUG PRINTING
+    /*
+    println!("EXPR_MAP CONTENTS:");
+    for (key, value) in &items {
+        println!("{:?} / {:?}", key, value);
+    }
+    println!();
+    println!("TERM_MAP CONTENTS:");
+    for (key, value) in &terms {
+        println!("{:?} / {:?}", key, value);
+    }
+    println!();
+    println!("UNDERSTOOD TOKENS:");
+    for piece in parsed_input {
+        print!("{:?}", piece);
+        print!(", ");
+    }
+    println!();
+
+    //END OF DEBUG PRINTING BLOCK
+    */
+
 
 }
 
