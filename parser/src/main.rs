@@ -4,6 +4,7 @@ use std::io::prelude::*;
 
 //test comment
 
+
 fn read_input() {
     let mut count = 0;
     let nonterms = ["&", "|", "!", "="];
@@ -31,17 +32,19 @@ fn read_input() {
         }
 
     }
-    /*
+
     for (key, value) in &expr_map {
-        print!("{} / {}", key, value);
+        println!("{:?} / {:?}", key, value);
     }
-    */
+
 }
 
 
 fn main() {
     //We are going to test the parsing of "a AND b."
     //STILL WORKING ON THIS.
+
+    read_input();
 
     let mut items: HashMap<(String, i32), (i32, (String, i32), (String, i32))> = HashMap::new();
     let mut terms: HashMap<(String, i32), bool> = HashMap::new();
@@ -79,7 +82,6 @@ fn main() {
         terms.insert(a_key.clone(), true);
         terms.insert(b_key.clone(), false);
         println!("{}", evaluate(eval_tuple_real.clone(), &items, &terms));
-
 
     }
 
