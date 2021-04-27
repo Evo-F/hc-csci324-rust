@@ -2,56 +2,22 @@ use std::collections::HashMap;
 use std::io;
 use std::io::prelude::*;
 
-//test comment
-
-
-fn read_input() {
-    let mut count = 0;
-    let nonterms = ["&", "|", "!", "="];
-    let mut expr_map = HashMap::new();
-
-    print!("Enter Expression: ");
-    io::stdout().flush().unwrap();
-    let mut input = String::new();
-    std::io::stdin().read_line(&mut input).unwrap();
-    let expr = input.split_whitespace();
-
-    for symbol in expr {
-        if nonterms.contains(&symbol) {
-            count = count + 1;
-            match symbol {
-                "&" => expr_map.insert((symbol, count), (1, ("Sub1", 0), ("Sub2", 0))),
-                "|" => expr_map.insert((symbol, count), (2, ("Sub1", 0), ("Sub2", 0))),
-                "!" => expr_map.insert((symbol, count), (3, ("Sub1", 0), ("Sub2", 0))),
-                "=" => expr_map.insert((symbol, count), (4, ("Sub1", 0), ("Sub2", 0))),
-                _ => expr_map.insert((symbol, count), (0, ("Null", 0), ("Null", 0)))
-            };
-        }
-        else if !expr_map.contains_key(&(symbol, 0)) {
-            expr_map.insert((symbol, 0), (0, ("Stuff", 0), ("Things", 0)));
-        }
-
-    }
-
-    for (key, value) in &expr_map {
-        println!("{:?} / {:?}", key, value);
-    }
-
-}
+mod tokenizer;
+mod logic;
 
 
 fn main() {
+
+
     //We are going to test the parsing of "a AND b."
     //STILL WORKING ON THIS.
-
-    read_input();
-
+    /*
     let mut items: HashMap<(String, i32), (i32, (String, i32), (String, i32))> = HashMap::new();
     let mut terms: HashMap<(String, i32), bool> = HashMap::new();
 
-    let a_key: (String, i32) = ("a".parse().unwrap(), 0);
-    let b_key: (String, i32) = ("b".parse().unwrap(), 0);
-    let and_key: (String, i32) = ("&".parse().unwrap(), 0);
+    let a_key: (String, i32) = ("a".to_string(), 0);
+    let b_key: (String, i32) = ("b".to_string(), 0);
+    let and_key: (String, i32) = ("&".to_string(), 0);
 
     items.insert(a_key.clone(), (0, a_key.clone(), a_key.clone()));
     items.insert(b_key.clone(), (0, b_key.clone(), b_key.clone()));
@@ -83,22 +49,87 @@ fn main() {
         terms.insert(b_key.clone(), false);
         println!("{}", evaluate(eval_tuple_real.clone(), &items, &terms));
 
+
+    }*/
+
+    let (mut a, mut terms, c) = tokenizer::read_input();
+    /*
+    A - The items map.
+    B - The terms map.
+    C - The tokenized vector.
+     */
+    let (items, root) = logic::config_hashmaps(a, c);
+
+
+    let mut table_width = 0;
+    let iter_end = (2 as i32).pow((terms.len()) as u32);
+    // Print out the table header.
+    for key in terms.keys() {
+        print!("|  {}  ", key.0);
+        table_width = table_width + key.0.len() + 5;
     }
+    println!("|  RESULT  |\n{}", format!("{:-^1$}", "", table_width + "|  RESULT  |".len()));
+
+    let mut binary_count = 0;
+    let mut binary_bool = false;
+
+    for iter in 0..iter_end {
+        binary_count = iter;
+        // Print out each variable's boolean value for this row.
+        for key in terms.clone().keys() {
+            binary_bool = (binary_count % 2 != 0);
+            binary_count = binary_count / 2;
+            terms.insert(key.clone(), binary_bool);
+            // Print out the appropriate TRUE or FALSE symbol.
+            if binary_bool { print!("{}", format!("|  {:^1$}  ", "T", key.0.len())); }
+            else { print!("{}", format!("|  {:^1$}  ", "F", key.0.len())); }
+        }
+        // Print out RESULTS column
+        if evaluate(root.clone(), &items, &terms) {
+            println!("{}", format!("|  {:^1$}  |", "T", "RESULT".len()));
+        }
+        else {
+            println!("{}", format!("|  {:^1$}  |", "F", "RESULT".len()));
+        }
+    }
+
+
+
+    // BELOW IS ALL DEBUG PRINTING
+    /*
+    println!("EXPR_MAP CONTENTS:");
+    for (key, value) in &items {
+        println!("{:?} / {:?}", key, value);
+    }
+    println!();
+    println!("TERM_MAP CONTENTS:");
+    for (key, value) in &terms {
+        println!("{:?} / {:?}", key, value);
+    }
+    println!();
+    println!("UNDERSTOOD TOKENS:");
+    for piece in parsed_input {
+        print!("{:?}", piece);
+        print!(", ");
+    }
+    println!();
+
+    //END OF DEBUG PRINTING BLOCK
+    */
+
 
 }
 
-fn evaluate(tuple: (i32, (String, i32), (String, i32)),
+fn evaluate(key: (String, i32),
             items: &HashMap<(String, i32), (i32, (String, i32), (String, i32))>,
             terms: &HashMap<(String, i32), bool>) -> bool {
-    let (mode, a, b) = tuple;
 
-    let mut a_temp;
-    let mut b_temp;
+    let (mode, a, b) = items.get(&key).unwrap();
 
-    return if mode == 0 {
+    return if *mode == 0 {
         // This means we've reached a terminal and just need to get its value.
         // The b element is not needed, as terminals point to themselves in closed loops.
-        let a_temp = terms.get(&a);
+        let a_temp = terms.get(&key);
 
         if a_temp.is_none() {
             return false;
@@ -109,15 +140,8 @@ fn evaluate(tuple: (i32, (String, i32), (String, i32)),
         let mut a_bool = false;
         let mut b_bool = false;
 
-        a_temp = items.get(&a);
-        b_temp = items.get(&b);
-
-        if a_temp.is_none() || b_temp.is_none() {
-            return false;
-        }
-
-        a_bool = evaluate(a_temp.unwrap().clone(), &items, &terms);
-        b_bool = evaluate(b_temp.unwrap().clone(), &items, &terms);
+        a_bool = evaluate(a.clone(), &items, &terms);
+        b_bool = evaluate(b.clone(), &items, &terms);
 
         match mode {
             1 => a_bool && b_bool, // AND
