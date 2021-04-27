@@ -64,6 +64,7 @@ fn main() {
 
     println!("RESULT 1: {}", evaluate(root.clone(), &items, &terms));
     terms.insert(("a".to_string(), 0), true);
+    terms.insert(("b".to_string(), 0), true);
     println!("RESULT 2: {}", evaluate(root.clone(), &items, &terms));
 
 
