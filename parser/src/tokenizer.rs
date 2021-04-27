@@ -8,6 +8,7 @@ pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32
     let mut tokens = Vec::new();
 
     let nonterms = ["&", "|", "!", "=", "(", "[", ")", "]"];
+    let logterms = ["&", "|", "!", "="];
     let mut expr_map = HashMap::new();
     let mut term_map = HashMap::new();
 
@@ -19,17 +20,40 @@ pub fn read_input() -> (HashMap<(String, i32), (i32, (String, i32), (String, i32
         let expr = input.split_whitespace();
 
         let mut parenth_score = 0;
+        let mut index = 0;
+        let mut valid_input = true;
+        let mut symbol_vector = Vec::new();
+
         for symbol in expr.clone() {
+            symbol_vector.push(symbol.clone());
+        }
+
+        for symbol in symbol_vector.clone() {
+            valid_input = true;
+
+            if logterms.contains(&symbol) && !symbol.eq("!") {
+                let max_index = (symbol_vector.len() - 1) as i32;
+
+                if index == 0 || index == max_index {
+                    valid_input = false;
+                }
+            }
+
             match symbol {
                 "(" | "[" => parenth_score += 1,
                 ")" | "]" => parenth_score -= 1,
                 _ => ()
             }
             if parenth_score < 0 {
+                valid_input = false;
+            }
+
+            if !valid_input {
                 break;
             }
+            index += 1;
         }
-        if parenth_score != 0 {
+        if !valid_input {
             println!("Invalid Input!");
             continue;
         }

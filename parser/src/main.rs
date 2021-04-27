@@ -124,6 +124,12 @@ fn evaluate(key: (String, i32),
             items: &HashMap<(String, i32), (i32, (String, i32), (String, i32))>,
             terms: &HashMap<(String, i32), bool>) -> bool {
 
+    /*
+    println!("ATTEMPTING EVALUATION FUNCTION. CURRENT ITEMS:");
+    for (key, value) in items.clone() {
+        println!("{:?} / {:?}", key, value);
+    }
+    */
     let (mode, a, b) = items.get(&key).unwrap();
 
     return if *mode == 0 {
