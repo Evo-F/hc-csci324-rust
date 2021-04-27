@@ -8,83 +8,78 @@ pub fn config_hashmaps(mut items: HashMap<(String, i32), (i32, (String, i32), (S
 
     let mut root = ("Init".to_string(), -1);
 
-    /*
-    println!("TOKENS:");
-    for str in &token_list {
-        print!("{:?}", str);
-        print!(", ");
-    }
-    println!();
-
-    println!("EXPR_MAP CONTENTS:");
-    for (key, value) in &items {
-        println!("{:?} / {:?} / {:?}", key, value, value.0);
-    }
-    println!();
-    println!("TERM_MAP CONTENTS:");
-    for (key, value) in &terms {
-        println!("{:?} / {:?}", key, value);
-    }
-    println!();
-     */
-
     let nonterms = ["&".to_string(), "|".to_string(), "!".to_string(), "=".to_string()];
 
-    let mut starting_index = 0;
+    let mut start_index = 1;
+    let mut end_index = token_list.len();
     while token_list.len() > 1 {
         let mut index = 0;
 
-        for i in starting_index..token_list.len() {
+        let mut removal = false;
+        for i in start_index..end_index {
             let token_tuple = &token_list[i];
             let token: String = token_tuple.0.clone();
+
             if nonterms.contains(&token) {
                 //The object we're now dealing with is a logical operator. This means we need the terms on either side of it.
 
                 let left_term_key: (String, i32) = token_list[i-1].clone();
                 let right_term_key: (String, i32) = token_list[i+1].clone();
 
+                if left_term_key.0.eq("(") && right_term_key.0.eq(")") {
+                    index = i;
+                    removal = true;
+                    break;
+                }
+
+                match left_term_key.0.as_str() {
+                    ")" => {
+                        end_index = i - 1;
+                        for x in end_index .. usize::MIN {
+                            let parenth_token = &token_list[x];
+                            if parenth_token.0.eq("(") && parenth_token.1 == left_term_key.1 {
+                                start_index = x;
+                                break;
+                            }
+                        }
+                        break;
+                    },
+                    _ => ()
+                };
+
+                match right_term_key.0.as_str() {
+                    "(" => {
+                        start_index = i + 1;
+                        for x in start_index .. token_list.len() {
+                            let parenth_token = &token_list[x];
+                            if parenth_token.0.eq(")") && parenth_token.1 == right_term_key.1 {
+                                end_index = x;
+                                break;
+                            }
+                        }
+                        break;
+                    },
+                    _ => ()
+                }
+
                 let value = items.get(&token_tuple).unwrap().clone();
 
                 items.insert(token_tuple.clone(), (value.0, left_term_key, right_term_key));
                 index = i;
+                removal = true;
                 break;
             }
         }
 
-        token_list.remove(index - 1); // removes left term
-        token_list.remove(index); // accounting for shift to the left, removes right term
-        // token_list is now "collapsed" a little bit
-        starting_index = index;
+        if removal {
+            token_list.remove(index - 1); // removes left term
+            token_list.remove(index); // accounting for shift to the left, removes right term
+            // token_list is now "collapsed" a little bit
+            start_index = 1;
+        }
     }
 
     root = token_list[0].clone();
-
-
-    /*
-    println!();
-    println!("WE ARE NOW PAST THE MAIN FOR LOOP AND REVIEWING THE HASHMAPS AND TOKEN LIST.");
-    println!();
-    println!("TOKENS:");
-    for str in &token_list {
-        print!("{:?}", str);
-        print!(", ");
-    }
-    println!();
-
-    println!("EXPR_MAP CONTENTS:");
-    for (key, value) in &items {
-        println!("{:?} / {:?} / {:?}", key, value, value.0);
-    }
-    println!();
-    println!("TERM_MAP CONTENTS:");
-    for (key, value) in &terms {
-        println!("{:?} / {:?}", key, value);
-    }
-    println!();
-    println!("ROOT KEY: {:?}", root);
-     */
-
-
 
     return (items, root);
 

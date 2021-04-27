@@ -36,7 +36,7 @@ fn validate_word(word: String, diff: u32) -> bool {
 // The number provided as diff corresponds to a difficulty option. See below.
 pub fn choose_word(diff: u32) -> String {
 
-    let filename = "src/dictionary.txt";
+    let filename = "dictionary.txt";
     if filename.contains("testdict") {
         println!("DEV NOTICE: You are using the test dictionary!")
     }
