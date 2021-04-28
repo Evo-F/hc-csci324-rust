@@ -1,0 +1,21 @@
+a & b
+// True when [a] and [b] are true
+
+a & b & c
+// True when [a], [b], and [c] are true
+
+a & b | a
+// True when [a] is true
+
+( a & b ) = ( c | d )
+// True when [a] and [b] are true along with either [c] or [d]
+// Also true when all values are false
+
+stuff = things
+// True when [stuff] and [things] are either both true or both false
+
+! ( a & b ) | ! ( c | d )
+// True when [a] or [b] is false OR when [c] and [d] are both false
+
+john & paul & george & ringo
+// True when all values are true
